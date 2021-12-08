@@ -40,44 +40,51 @@ class NavigationDrawerWidget extends StatelessWidget {
                         onClicked: () =>
                             selectedItem(context, 0, name, email, urlImage),
                       ),
-                      const SizedBox(height: 5),
+                      const SizedBox(height: 3),
                       buildMenuItem(
                         text: 'To Do List',
                         icon: Icons.check_box,
                         onClicked: () =>
                             selectedItem(context, 1, name, email, urlImage),
                       ),
-                      const SizedBox(height: 5),
+                      const SizedBox(height: 3),
                       buildMenuItem(
                         text: 'Notes',
                         icon: Icons.note_add_rounded,
                         onClicked: () =>
                             selectedItem(context, 2, name, email, urlImage),
                       ),
-                      const SizedBox(height: 5),
+                      const SizedBox(height: 3),
                       buildMenuItem(
                         text: 'My Schedule',
                         icon: Icons.schedule,
                         onClicked: () =>
                             selectedItem(context, 3, name, email, urlImage),
                       ),
-                      const SizedBox(height: 5),
+                      const SizedBox(height: 3),
                       buildMenuItem(
                         text: 'Community Forum',
                         icon: Icons.people_alt,
                         onClicked: () =>
                             selectedItem(context, 4, name, email, urlImage),
                       ),
-                      const SizedBox(height: 5),
+                      const SizedBox(height: 3),
                       buildMenuItem(
                         text: 'Anonymus Message',
                         icon: Icons.security_rounded,
                         onClicked: () =>
                             selectedItem(context, 5, name, email, urlImage),
                       ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 3),
+                      buildMenuItem(
+                        text: 'News',
+                        icon: Icons.wifi_tethering_outlined,
+                        onClicked: () =>
+                            selectedItem(context, 6, name, email, urlImage),
+                      ),
+                      const SizedBox(height: 15),
                       Divider(color: Colors.white70),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 15),
                       buildMenuItem(
                         text: 'logout',
                         icon: Icons.logout,
@@ -204,6 +211,15 @@ class NavigationDrawerWidget extends StatelessWidget {
       case 5:
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => AnonymusPage(
+            name: name,
+            email: email,
+            urlImage: urlImage,
+          ),
+        ));
+        break;
+      case 6:
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => NewsPage(
             name: name,
             email: email,
             urlImage: urlImage,

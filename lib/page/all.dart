@@ -4,3 +4,4 @@ export 'notes_page.dart';
 export 'profile_page.dart';
 export 'schedule_page.dart';
 export 'to_do_page.dart';
+export 'news_page.dart';

@@ -14,7 +14,7 @@ Future main() async {
 }
 
 class MyApp extends StatelessWidget {
-  static final String title = 'Navigation Drawer';
+  static final String title = 'Be Productive';
 
   @override
   Widget build(BuildContext context) => MaterialApp(
@@ -34,7 +34,6 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
         drawer: NavigationDrawerWidget(),
-        // endDrawer: NavigationDrawerWidget(),
         appBar: AppBar(
           title: Text(MyApp.title),
         ),
