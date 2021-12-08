@@ -70,7 +70,7 @@ class NavigationDrawerWidget extends StatelessWidget {
                       ),
                       const SizedBox(height: 3),
                       buildMenuItem(
-                        text: 'Anonymus Message',
+                        text: 'Anonymous Message',
                         icon: Icons.security_rounded,
                         onClicked: () =>
                             selectedItem(context, 5, name, email, urlImage),
@@ -210,7 +210,7 @@ class NavigationDrawerWidget extends StatelessWidget {
         break;
       case 5:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => AnonymusPage(
+          builder: (context) => AnonymousPage(
             name: name,
             email: email,
             urlImage: urlImage,
