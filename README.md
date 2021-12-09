@@ -34,3 +34,6 @@ User persona dari website ini hanya ada dua, yaitu:
 |   |                 |User dapat mengirimkan berupa teks ke dalam forum.                              |        |
 |6  |Anonymous Message|User dapat mengirimkan pertanyaan anonim secara privat ke user lain berupa teks.           |Fathan  |
 |7  |News             |User dapat request untuk publish blog/news lewat page news, lalu admin web yang verifikasi.|Nasywa  |
+
+## Integrasi dengan Web Service
+Kami melakukan integrasi dengan web service sebelumnya yang dibangun menggunakan framework Django dengan cara membuat views yang mengembalikan response data dalam bentuk json. Sehingga, response berupa json tersebut dapat diproses untuk ditampilkan pada aplikasi flutter kami.
