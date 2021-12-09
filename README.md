@@ -9,6 +9,8 @@
 - Nasywa Kamila (2006486885)
 - Isyah Auliarahmani Rafifa (2006464221)
 
+### [Link Download APK](https://github.com/Proyek-Django-F02/uas-f02/raw/master/build/app/outputs/apk/release/app-release.apk)
+
 ## Tema
 Kelompok kami mengangkat tema aplikasi Productivity.
 
