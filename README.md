@@ -31,6 +31,6 @@ User persona dari website ini hanya ada dua, yaitu:
 |3  |Notes            |User dapat menambahkan dan menghapus catatan berupa memo singkat.                          |Reyza   |
 |4  |Schedule         |User dapat menambahkan dan menghapus aktivitas dengan keterangan waktu, tipe aktivitas, dan deskripsi aktivitas pada kalender. Aktivitas ditampilkan per                                                                |Isyah   |
 |5  |Community Forum  |Berbentuk forum untuk seluruh user yang telah login. User dapat mengirimkan post berupa teks ke dalam forum serta mengomentari post user lain.                                                                          |Fauzul  |
-|   |                 |User dapat mengirimkan berupa teks dan gambar ke dalam forum.                              |        |
+|   |                 |User dapat mengirimkan berupa teks ke dalam forum.                              |        |
 |6  |Anonymous Message|User dapat mengirimkan pertanyaan anonim secara privat ke user lain berupa teks.           |Fathan  |
 |7  |News             |User dapat request untuk publish blog/news lewat page news, lalu admin web yang verifikasi.|Nasywa  |
