@@ -141,7 +141,7 @@ class NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                               const SizedBox(height: 3),
                               buildMenuItem(
                                 isLoggedIn: isLoggedIn,
-                                text: 'Anonymus Message',
+                                text: 'Anonymous Message',
                                 icon: Icons.security_rounded,
                                 onClicked: () => selectedItem(
                                     context,
@@ -334,7 +334,7 @@ class NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
         break;
       case 5:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => AnonymusPage(
+          builder: (context) => AnonymousPage(
             name: name,
             email: email,
             urlImage: urlImage,

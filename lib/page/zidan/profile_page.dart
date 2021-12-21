@@ -6,7 +6,7 @@ import 'package:uas_f02/widget/button_widget.dart';
 
 Future<Profile> fetchProfile(String username) async {
   final response = await http
-      .get(Uri.parse('http://localhost:8000/user/flutter/profile/' + username));
+      .get(Uri.parse('http://10.0.2.2:8000/user/flutter/profile/' + username));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -144,7 +144,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         buildField("Birthday", snapshot.data!.bod),
                         buildField("Deskripsi diri", snapshot.data!.bio),
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal:60),
+                          padding: EdgeInsets.symmetric(horizontal: 60),
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               minimumSize: Size.fromHeight(50),

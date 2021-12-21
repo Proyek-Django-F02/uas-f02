@@ -138,9 +138,9 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
-                      print(_name+"  "+_password);
+                      print(_name + "  " + _password);
                       final response = await http.post(
-                          Uri.parse("http://localhost:8000/user/flutter/login"),
+                          Uri.parse("http://10.0.2.2:8000/user/flutter/login"),
                           headers: <String, String>{
                             'Content-Type': 'application/json;charset=UTF-8',
                           },
@@ -149,6 +149,7 @@ class _LoginPageState extends State<LoginPage> {
                             'username': _name,
                             'password': _password
                           }));
+                      print(response.body);
                       final Map parsed = json.decode(response.body);
                       if (response.statusCode == 200) {
                         _loginUser(parsed['username'], parsed['email']);
