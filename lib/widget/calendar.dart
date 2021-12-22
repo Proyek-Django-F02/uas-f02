@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import '../schedule_event.dart';
+import '../temp_schedule_event.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
