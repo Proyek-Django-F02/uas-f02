@@ -23,6 +23,7 @@ environment:
 dependencies:
   http: "0.13.3"
   shared_preferences: "2.0.7"
+  date_field: "2.1.2"
   flutter:
     sdk: flutter
 
