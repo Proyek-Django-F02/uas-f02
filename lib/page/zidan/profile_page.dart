@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:uas_f02/widget/button_widget.dart';
+import 'package:uas_f02/page/zidan/edit_profile_page.dart';
 
 Future<Profile> fetchProfile(String username) async {
   final response = await http
@@ -33,10 +35,18 @@ class Profile {
   });
 
   factory Profile.fromJson(Map<String, dynamic> json) {
+    String res = "";
+    try {
+      DateTime x = DateTime.parse(json['bod']);
+      res =
+          x.day.toString() + "/" + x.month.toString() + "/" + x.year.toString();
+    } catch (e) {
+      res = "belum diatur";
+    }
     return Profile(
         username: json['username'],
         email: json['email'],
-        bod: json['bod'],
+        bod: res,
         bio: json['bio']);
   }
 }
@@ -63,7 +73,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     name = widget.name;
     urlImage = widget.urlImage;
@@ -79,7 +88,7 @@ class _ProfilePageState extends State<ProfilePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              judul + " : ",
+              judul,
               style: TextStyle(
                   fontSize: 20,
                   color: Colors.blue,
@@ -96,16 +105,14 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget buildContent() => Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.mode_edit_outline, size: 28),
-          SizedBox(width: 16),
-          Text(
-            "Edit Profile",
-            style: TextStyle(fontSize: 22, color: Colors.white),
-          ),
-        ],
+  Widget buildContent() => CircleAvatar(
+        radius: 25,
+        backgroundColor: Colors.blue.shade400,
+        child: Icon(
+          Icons.mode_edit_outline,
+          color: Colors.white,
+          size: 25,
+        ),
       );
   @override
   Widget build(BuildContext context) {
@@ -139,20 +146,34 @@ class _ProfilePageState extends State<ProfilePage> {
                         SizedBox(
                           height: 20,
                         ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                right: MediaQuery.of(context).size.width * 0.15,
+                              ),
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  shape: CircleBorder(),
+                                  padding: EdgeInsets.all(1),
+                                ),
+                                child: buildContent(),
+                                onPressed: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => EditProfile(
+                                            email: email,
+                                            name: name,
+                                          )));
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
                         buildField("Nama", name),
                         buildField("Email", email),
                         buildField("Birthday", snapshot.data!.bod),
                         buildField("Deskripsi diri", snapshot.data!.bio),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 60),
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: Size.fromHeight(50),
-                            ),
-                            child: buildContent(),
-                            onPressed: () {},
-                          ),
-                        ),
                         SizedBox(
                           height: 40,
                         )
