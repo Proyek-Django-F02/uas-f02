@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:uas_f02/widget/zidan/DatePicker.dart' as datepicker;
 import 'package:flutter/material.dart';
 // import 'package:';
@@ -8,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 Future<Profile> fetchProfile(String username) async {
   final response = await http
-      .get(Uri.parse('http://localhost:8000/user/flutter/profile/' + username));
+      .get(Uri.parse('http://10.0.2.2:8000/user/flutter/profile/' + username));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -177,7 +176,7 @@ class _EditProfileState extends State<EditProfile> {
                                   print(_selectedDate.value);
                                   final response = await http.post(
                                       Uri.parse(
-                                          "http://localhost:8000/user/flutter/edit-profile"),
+                                          "http://10.0.2.2:8000/user/flutter/edit-profile"),
                                       headers: <String, String>{
                                         'Content-Type':
                                             'application/json;charset=UTF-8',

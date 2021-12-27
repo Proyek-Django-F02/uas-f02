@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:html';
+// import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -8,7 +8,7 @@ import 'package:uas_f02/page/zidan/edit_profile_page.dart';
 
 Future<Profile> fetchProfile(String username) async {
   final response = await http
-      .get(Uri.parse('http://localhost:8000/user/flutter/profile/' + username));
+      .get(Uri.parse('http://10.0.2.2:8000/user/flutter/profile/' + username));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
