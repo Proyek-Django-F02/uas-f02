@@ -2,7 +2,7 @@ export 'anonymous_page.dart';
 export 'community_forum_page.dart';
 export 'notes_page.dart';
 export 'zidan/profile_page.dart';
-export 'schedule_page.dart';
+export 'isyah/schedule_page.dart';
 export 'to_do_page.dart';
 export 'news_page.dart';
 export 'zidan/login_page.dart';
