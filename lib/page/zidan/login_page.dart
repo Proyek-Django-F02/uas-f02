@@ -140,7 +140,7 @@ class _LoginPageState extends State<LoginPage> {
                       _formKey.currentState!.save();
                       print(_name + "  " + _password);
                       final response = await http.post(
-                          Uri.parse("http://10.0.2.2:8000/user/flutter/login"),
+                          Uri.parse("http://localhost:8000/user/flutter/login"),
                           headers: <String, String>{
                             'Content-Type': 'application/json;charset=UTF-8',
                           },
