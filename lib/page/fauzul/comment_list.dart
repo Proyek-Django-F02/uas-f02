@@ -122,6 +122,8 @@ class _CommentListState extends State<CommentList> {
                                     children: [
                                       CircleAvatar(
                                         radius: 30.0,
+                                        backgroundImage: AssetImage(
+                                            'assets/images/profile_image_default.png'),
                                       ),
                                       SizedBox(width: 8.0),
                                       Expanded(
@@ -140,13 +142,17 @@ class _CommentListState extends State<CommentList> {
                                                       fontWeight:
                                                           FontWeight.bold),
                                                 ),
-                                                Expanded(
-                                                  child: IconButton(
-                                                    alignment:
-                                                        Alignment.centerRight,
-                                                    icon: const Icon(
-                                                        Icons.more_vert),
-                                                    onPressed: () {},
+                                                Visibility(
+                                                  visible: widget.authorEmail ==
+                                                      widget.userEmail,
+                                                  child: Expanded(
+                                                    child: IconButton(
+                                                      alignment:
+                                                          Alignment.centerRight,
+                                                      icon: const Icon(
+                                                          Icons.more_vert),
+                                                      onPressed: () {},
+                                                    ),
                                                   ),
                                                 ),
                                               ],

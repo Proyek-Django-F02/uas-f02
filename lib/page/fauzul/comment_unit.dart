@@ -25,6 +25,8 @@ class _CommentUnitState extends State<CommentUnit> {
         children: [
           CircleAvatar(
             radius: 30.0,
+            backgroundImage:
+                AssetImage('assets/images/profile_image_default.png'),
           ),
           SizedBox(width: 8.0),
           Expanded(
@@ -44,14 +46,6 @@ class _CommentUnitState extends State<CommentUnit> {
                     Text(
                       '· 6h',
                       style: TextStyle(fontSize: 17.0),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: IconButton(
-                        alignment: Alignment.centerRight,
-                        icon: const Icon(Icons.more_vert),
-                        onPressed: () {},
-                      ),
                     ),
                   ],
                 ),

@@ -42,6 +42,8 @@ class _PostUnitState extends State<PostUnit> {
           children: [
             CircleAvatar(
               radius: 30.0,
+              backgroundImage:
+                  AssetImage('assets/images/profile_image_default.png'),
             ),
             SizedBox(width: 8.0),
             Expanded(
@@ -71,12 +73,15 @@ class _PostUnitState extends State<PostUnit> {
                         style: TextStyle(fontSize: 17.0),
                         overflow: TextOverflow.ellipsis,
                       ),
-                      Expanded(
-                        flex: 1,
-                        child: IconButton(
-                          alignment: Alignment.centerRight,
-                          icon: const Icon(Icons.more_vert),
-                          onPressed: () {},
+                      Visibility(
+                        visible: widget.userEmail == widget.authorEmail,
+                        child: Expanded(
+                          flex: 1,
+                          child: IconButton(
+                            alignment: Alignment.centerRight,
+                            icon: const Icon(Icons.more_vert),
+                            onPressed: () {},
+                          ),
                         ),
                       ),
                     ],
