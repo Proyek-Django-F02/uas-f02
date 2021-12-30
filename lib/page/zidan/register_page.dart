@@ -174,7 +174,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       print(_password);
                       final response = await http.post(
                           Uri.parse(
-                              "http://localhost:8000/user/flutter/register"),
+                              "http://django-f02.herokuapp.com/user/flutter/register"),
                           headers: <String, String>{
                             'Content-Type': 'application/json;charset=UTF-8',
                           },
