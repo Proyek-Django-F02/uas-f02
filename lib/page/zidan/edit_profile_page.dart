@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 Future<Profile> fetchProfile(String username) async {
   final response = await http
-      .get(Uri.parse('http://10.0.2.2:8000/user/flutter/profile/' + username));
+      .get(Uri.parse('http://django-f02.herokuapp.com/user/flutter/profile/' + username));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -176,7 +176,7 @@ class _EditProfileState extends State<EditProfile> {
                                   print(_selectedDate.value);
                                   final response = await http.post(
                                       Uri.parse(
-                                          "http://10.0.2.2:8000/user/flutter/edit-profile"),
+                                          "http://django-f02.herokuapp.com/user/flutter/edit-profile"),
                                       headers: <String, String>{
                                         'Content-Type':
                                             'application/json;charset=UTF-8',
