@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 
 Future<String> createComment(String body, String post_id, String email) async {
   final response = await http.post(
-      Uri.parse('http://localhost:8000/forum/flutter/add-comment/'),
+      Uri.parse('http://django-f02.herokuapp.com/forum/flutter/add-comment/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -28,7 +28,7 @@ Future<String> createComment(String body, String post_id, String email) async {
 }
 
 Future<List<Comment>> fetchComment(String pk) async {
-  var url = Uri.parse('http://localhost:8000/forum/post/${pk}/json');
+  var url = Uri.parse('http://django-f02.herokuapp.com/forum/post/${pk}/json');
   final response = await http.get(url);
   if (response.statusCode == 200) {
     List jsonResponse = json.decode(response.body);
@@ -75,6 +75,11 @@ class _CommentListState extends State<CommentList> {
   TextEditingController replyController = TextEditingController();
   late Future<List<Comment>> futureComment;
 
+  String _getTime(String timeString) {
+    DateTime p = DateTime.parse(timeString);
+    return '${p.day}-${p.month}-${p.year} ${p.hour}:${p.minute}';
+  }
+
   @override
   void initState() {
     super.initState();
@@ -100,155 +105,167 @@ class _CommentListState extends State<CommentList> {
         ),
         body: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
-          child: Column(
-            children: [
-              FutureBuilder<List<Comment>>(
-                future: futureComment,
-                builder: (context, snapshot) {
-                  if (!snapshot.hasError) {
-                    List<Comment>? comments = snapshot.data;
-                    return Expanded(
-                      child: ListView.builder(
-                        itemCount: comments == null ? 1 : comments.length + 1,
-                        itemBuilder: (BuildContext context, int index) {
-                          if (index == 0) {
-                            return Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      CircleAvatar(
-                                        radius: 30.0,
-                                        backgroundImage: AssetImage(
-                                            'assets/images/profile_image_default.png'),
-                                      ),
-                                      SizedBox(width: 8.0),
-                                      Expanded(
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  widget.title,
-                                                  style: TextStyle(
-                                                      fontSize: 22.0,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                                Visibility(
-                                                  visible: widget.authorEmail ==
-                                                      widget.userEmail,
-                                                  child: Expanded(
-                                                    child: IconButton(
-                                                      alignment:
-                                                          Alignment.centerRight,
-                                                      icon: const Icon(
-                                                          Icons.more_vert),
-                                                      onPressed: () {
-                                                        modalBottomSheetMenu(
-                                                            context,
-                                                            widget.id,
-                                                            widget.title,
-                                                            widget.description);
-                                                      },
+          child: RefreshIndicator(
+            onRefresh: () async {
+              setState(() {
+                futureComment = fetchComment(widget.id);
+              });
+            },
+            child: Column(
+              children: [
+                FutureBuilder<List<Comment>>(
+                  future: futureComment,
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasError) {
+                      List<Comment>? comments = snapshot.data;
+                      return Expanded(
+                        child: ListView.builder(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          itemCount: comments == null ? 1 : comments.length + 1,
+                          itemBuilder: (BuildContext context, int index) {
+                            if (index == 0) {
+                              return Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        CircleAvatar(
+                                          radius: 30.0,
+                                          backgroundImage: AssetImage(
+                                              'assets/images/profile_image_default.png'),
+                                        ),
+                                        SizedBox(width: 8.0),
+                                        Expanded(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Flexible(
+                                                    child: Text(
+                                                      widget.title,
+                                                      style: TextStyle(
+                                                          fontSize: 22.0,
+                                                          fontWeight:
+                                                              FontWeight.bold),
                                                     ),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                            Text(
-                                              '@${widget.username}',
-                                              style: TextStyle(
-                                                fontSize: 19.0,
-                                                color: Colors.grey[700],
+                                                  Visibility(
+                                                    visible:
+                                                        widget.authorEmail ==
+                                                            widget.userEmail,
+                                                    child: Expanded(
+                                                      child: IconButton(
+                                                        alignment: Alignment
+                                                            .centerRight,
+                                                        icon: const Icon(
+                                                            Icons.more_vert),
+                                                        onPressed: () {
+                                                          modalBottomSheetMenu(
+                                                              context,
+                                                              widget.id,
+                                                              widget.title,
+                                                              widget
+                                                                  .description);
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
-                                            ),
-                                          ],
+                                              Text(
+                                                '@${widget.username}',
+                                                style: TextStyle(
+                                                  fontSize: 19.0,
+                                                  color: Colors.grey[700],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 10.0),
-                                  Text(
-                                    widget.description,
-                                    style: TextStyle(fontSize: 24.5),
-                                  ),
-                                  SizedBox(height: 5.0),
-                                  Text(
-                                    widget.time,
-                                    style: TextStyle(
-                                        fontSize: 16.0,
-                                        color: Colors.grey[700]),
-                                  ),
-                                  Divider(
-                                    color: Colors.grey[800],
-                                    thickness: 0.8,
-                                  ),
-                                ],
-                              ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10.0),
+                                    Text(
+                                      widget.description,
+                                      style: TextStyle(fontSize: 24.5),
+                                    ),
+                                    SizedBox(height: 5.0),
+                                    Text(
+                                      '${_getTime(widget.time)}',
+                                      style: TextStyle(
+                                          fontSize: 16.0,
+                                          color: Colors.grey[700]),
+                                    ),
+                                    Divider(
+                                      color: Colors.grey[800],
+                                      thickness: 0.8,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+                            index -= 1;
+                            return Column(
+                              children: [
+                                CommentUnit(
+                                    body: comments![index].body,
+                                    username: comments[index].author,
+                                    time: comments[index].time),
+                                Divider(
+                                  color: Colors.black,
+                                  thickness: 0.7,
+                                ),
+                              ],
                             );
-                          }
-                          index -= 1;
-                          return Column(
-                            children: [
-                              CommentUnit(
-                                  body: comments![index].body,
-                                  username: comments[index].author,
-                                  time: comments[index].time),
-                              Divider(
-                                color: Colors.black,
-                                thickness: 0.7,
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    );
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('${snapshot.error}'));
-                  }
-                  return Center(child: CircularProgressIndicator());
-                },
-              ),
-              Container(
-                height: 45.0,
-                padding: EdgeInsets.only(top: 4.0, left: 12.0),
-                decoration:
-                    BoxDecoration(border: Border.all(color: Colors.grey)),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: replyController,
-                        decoration: InputDecoration.collapsed(
-                          hintText: 'Reply this post',
+                          },
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('${snapshot.error}'));
+                    }
+                    return Center(child: CircularProgressIndicator());
+                  },
+                ),
+                Container(
+                  height: 45.0,
+                  padding: EdgeInsets.only(top: 4.0, left: 12.0),
+                  decoration:
+                      BoxDecoration(border: Border.all(color: Colors.grey)),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: replyController,
+                          decoration: InputDecoration.collapsed(
+                            hintText: 'Reply this post',
+                          ),
                         ),
                       ),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        setState(() {
-                          createComment(replyController.text, widget.id,
-                              widget.userEmail);
-                          futureComment = fetchComment(widget.id);
-                          replyController.clear();
-                        });
-                      },
-                      icon: Icon(Icons.send),
-                      color: Colors.blue,
-                    )
-                  ],
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            createComment(replyController.text, widget.id,
+                                widget.userEmail);
+                            futureComment = fetchComment(widget.id);
+                            replyController.clear();
+                          });
+                        },
+                        icon: Icon(Icons.send),
+                        color: Colors.blue,
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

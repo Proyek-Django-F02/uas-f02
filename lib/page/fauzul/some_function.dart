@@ -76,7 +76,7 @@ void modalBottomSheetMenu(context, String postId, String title, String body) {
 
 Future<String> deletePost(String postId) async {
   final response = await http.post(
-      Uri.parse('http://localhost:8000/forum/flutter/delete-post/'),
+      Uri.parse('http://django-f02.herokuapp.com/forum/flutter/delete-post/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -91,5 +91,33 @@ Future<String> deletePost(String postId) async {
     return "No Topic yet";
   } else {
     return "Error's Occured";
+  }
+}
+
+String diffTime(String stringTime) {
+  DateTime datetime = DateTime.parse(stringTime);
+  DateTime now = DateTime.now();
+  var diff = now.difference(datetime);
+
+  if (diff.inDays >= 365) {
+    int year = diff.inDays ~/ 365;
+    return '${year}y';
+  } else if (diff.inDays >= 30) {
+    int month = diff.inDays ~/ 30;
+    return '${month}Mo';
+  } else if (diff.inDays >= 7) {
+    int week = diff.inDays ~/ 7;
+    return '${week}w';
+  } else if (diff.inHours >= 24) {
+    int day = diff.inHours ~/ 24;
+    return '${day}d';
+  } else if (diff.inMinutes >= 60) {
+    int hour = diff.inMinutes ~/ 60;
+    return '${hour}h';
+  } else if (diff.inSeconds >= 60) {
+    int minute = diff.inSeconds ~/ 60;
+    return '${minute}m';
+  } else {
+    return '${diff.inSeconds}s';
   }
 }

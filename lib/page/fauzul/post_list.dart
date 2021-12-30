@@ -8,7 +8,7 @@ import 'post_unit.dart';
 import 'package:http/http.dart' as http;
 
 Future<List<Post>> fetchPost(String pk) async {
-  var url = Uri.parse('http://localhost:8000/forum/topic/$pk/json');
+  var url = Uri.parse('http://django-f02.herokuapp.com/forum/topic/$pk/json');
   final response = await http.get(url);
   if (response.statusCode == 200) {
     List jsonResponse = json.decode(response.body);
@@ -90,34 +90,42 @@ class _PostListState extends State<PostList> {
         ),
         body: Stack(
           children: [
-            FutureBuilder<List<Post>>(
-              future: futurePost,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  List<Post>? posts = snapshot.data;
-                  return ListView.separated(
-                    itemCount: posts!.length,
-                    separatorBuilder: (context, index) => Divider(
-                      color: Colors.grey[800],
-                      thickness: 0.8,
-                    ),
-                    itemBuilder: (context, index) {
-                      return PostUnit(
-                        title: posts[index].title,
-                        description: posts[index].description,
-                        username: posts[index].author,
-                        time: posts[index].time.toString(),
-                        id: posts[index].id,
-                        authorEmail: posts[index].authorEmail,
-                        userEmail: widget.userEmail,
-                      );
-                    },
-                  );
-                } else if (snapshot.hasError) {
-                  return Center(child: Text("${snapshot.error}"));
-                }
-                return Center(child: CircularProgressIndicator());
+            RefreshIndicator(
+              onRefresh: () async {
+                setState(() {
+                  futurePost = fetchPost(widget.topic_id);
+                });
               },
+              child: FutureBuilder<List<Post>>(
+                future: futurePost,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    List<Post>? posts = snapshot.data;
+                    return ListView.separated(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      itemCount: posts!.length,
+                      separatorBuilder: (context, index) => Divider(
+                        color: Colors.grey[800],
+                        thickness: 0.8,
+                      ),
+                      itemBuilder: (context, index) {
+                        return PostUnit(
+                          title: posts[index].title,
+                          description: posts[index].description,
+                          username: posts[index].author,
+                          time: posts[index].time.toString(),
+                          id: posts[index].id,
+                          authorEmail: posts[index].authorEmail,
+                          userEmail: widget.userEmail,
+                        );
+                      },
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text("${snapshot.error}"));
+                  }
+                  return Center(child: CircularProgressIndicator());
+                },
+              ),
             ),
             Container(
               margin: EdgeInsets.all(20.0),
@@ -132,7 +140,11 @@ class _PostListState extends State<PostList> {
                         builder: (_) => CreatePost(
                             topicId: widget.topic_id,
                             email: widget.userEmail))),
-                child: Icon(Icons.create),
+                child: Text(
+                  '+ Create Post',
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                ),
               ),
             ),
           ],

@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 Future<String> createPost(
     String title, String body, String topic_id, String email) async {
   final response = await http.post(
-      Uri.parse('http://localhost:8000/forum/flutter/add-post/'),
+      Uri.parse('http://django-f02.herokuapp.com/forum/flutter/add-post/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -104,12 +104,14 @@ class _CreatePostState extends State<CreatePost> {
                       context: context,
                       builder: (BuildContext context) => AlertDialog(
                         title: Text(
-                          '$response',
+                          'submitted',
                           textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.blue),
                         ),
                         content: Icon(
                           Icons.check_circle_outline,
                           size: 50,
+                          color: Colors.blue,
                         ),
                       ),
                     );

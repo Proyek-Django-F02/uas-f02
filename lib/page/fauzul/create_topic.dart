@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 
 Future<String> createTopic(String title, String description) async {
   final response = await http.post(
-      Uri.parse('http://localhost:8000/forum/flutter/add-topic/'),
+      Uri.parse('http://django-f02.herokuapp.com/forum/flutter/add-topic/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -95,12 +95,14 @@ class _CreateTopicState extends State<CreateTopic> {
                   if (_formKey.currentState!.validate()) {
                     var addTopic =
                         createTopic(titleController.text, descController.text);
+                    titleController.clear();
+                    descController.clear();
                     // print(addTopic);
                     showDialog(
                       context: context,
                       builder: (BuildContext context) => AlertDialog(
                         title: Text(
-                          "${addTopic}",
+                          "submitted",
                           textAlign: TextAlign.center,
                           style: TextStyle(color: Colors.blue),
                         ),

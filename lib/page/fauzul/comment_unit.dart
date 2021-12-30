@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:uas_f02/page/fauzul/some_function.dart';
 
 class CommentUnit extends StatefulWidget {
   final String body, username, time;
@@ -44,7 +45,7 @@ class _CommentUnitState extends State<CommentUnit> {
                     ),
                     SizedBox(width: 5.0),
                     Text(
-                      '· 6h',
+                      '· ${diffTime(widget.time)}',
                       style: TextStyle(fontSize: 17.0),
                     ),
                   ],

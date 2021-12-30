@@ -55,10 +55,13 @@ class _PostUnitState extends State<PostUnit> {
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(
-                        widget.title,
-                        style: TextStyle(
-                            fontSize: 20.0, fontWeight: FontWeight.bold),
+                      Flexible(
+                        child: Text(
+                          widget.title,
+                          style: TextStyle(
+                              fontSize: 20.0, fontWeight: FontWeight.bold),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                       SizedBox(width: 2.0),
                       Text(
@@ -67,10 +70,11 @@ class _PostUnitState extends State<PostUnit> {
                           fontSize: 17.0,
                           color: Colors.grey[700],
                         ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                       SizedBox(width: 2.0),
                       Text(
-                        '· ' + 'time ' + 'h',
+                        '· ${diffTime(widget.time)}',
                         style: TextStyle(fontSize: 17.0),
                         overflow: TextOverflow.ellipsis,
                       ),

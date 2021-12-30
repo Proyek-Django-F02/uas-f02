@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 
 Future<String> updatePost(String title, String body, String post_id) async {
   final response = await http.post(
-      Uri.parse('http://localhost:8000/forum/flutter/update-post/'),
+      Uri.parse('http://django-f02.herokuapp.com/forum/flutter/update-post/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -115,12 +115,14 @@ class _UpdatePostState extends State<UpdatePost> {
                       context: context,
                       builder: (BuildContext context) => AlertDialog(
                         title: Text(
-                          '$response',
+                          'updated',
                           textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.blue),
                         ),
                         content: Icon(
                           Icons.check_circle_outline,
                           size: 50,
+                          color: Colors.blue,
                         ),
                       ),
                     );
@@ -129,7 +131,7 @@ class _UpdatePostState extends State<UpdatePost> {
                   }
                 },
                 child: Text(
-                  "create",
+                  "update",
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,

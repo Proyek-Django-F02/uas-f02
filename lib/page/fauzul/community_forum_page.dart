@@ -30,11 +30,15 @@ class CommunityForumPage extends StatelessWidget {
               alignment: Alignment.bottomRight,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Theme.of(context).primaryColor,
-                ),
+                    primary: Colors.white,
+                    side: BorderSide(width: 3.0, color: Colors.blue)),
                 onPressed: () => Navigator.push(context,
                     MaterialPageRoute(builder: (context) => CreateTopic())),
-                child: Icon(Icons.create),
+                child: Text(
+                  '+ Create Topic',
+                  style: TextStyle(
+                      color: Colors.blue, fontWeight: FontWeight.bold),
+                ),
               ),
             ),
           ],
