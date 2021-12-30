@@ -1,5 +1,5 @@
 export 'anonymous_page.dart';
-export 'community_forum_page.dart';
+export 'fauzul/community_forum_page.dart';
 export 'notes_page.dart';
 export 'zidan/profile_page.dart';
 export 'isyah/schedule_page.dart';
