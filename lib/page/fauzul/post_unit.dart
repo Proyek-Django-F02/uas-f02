@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:uas_f02/page/fauzul/some_function.dart';
 import 'comment_list.dart';
 
 class PostUnit extends StatefulWidget {
@@ -80,7 +81,10 @@ class _PostUnitState extends State<PostUnit> {
                           child: IconButton(
                             alignment: Alignment.centerRight,
                             icon: const Icon(Icons.more_vert),
-                            onPressed: () {},
+                            onPressed: () {
+                              modalBottomSheetMenu(context, widget.id,
+                                  widget.title, widget.description);
+                            },
                           ),
                         ),
                       ),

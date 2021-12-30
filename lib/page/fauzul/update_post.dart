@@ -1,22 +1,20 @@
-// ignore_for_file: prefer_const_constructors, non_constant_identifier_names, avoid_print
+// ignore_for_file: non_constant_identifier_names
 
 import 'dart:convert';
 
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-Future<String> createPost(
-    String title, String body, String topic_id, String email) async {
+Future<String> updatePost(String title, String body, String post_id) async {
   final response = await http.post(
-      Uri.parse('http://localhost:8000/forum/flutter/add-post/'),
+      Uri.parse('http://localhost:8000/forum/flutter/update-post/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, String>{
         'title': title,
         'body': body,
-        'topic_id': topic_id,
-        'email': email,
+        'post_id': post_id,
       }));
   if (response.statusCode == 200) {
     Map<String, dynamic> result = json.decode(response.body);
@@ -29,19 +27,30 @@ Future<String> createPost(
   }
 }
 
-class CreatePost extends StatefulWidget {
-  final String topicId, email;
-  const CreatePost({Key? key, required this.topicId, required this.email})
+class UpdatePost extends StatefulWidget {
+  final String postId, oldTitle, oldBody;
+  const UpdatePost(
+      {Key? key,
+      required this.postId,
+      required this.oldTitle,
+      required this.oldBody})
       : super(key: key);
 
   @override
-  _CreatePostState createState() => _CreatePostState();
+  _UpdatePostState createState() => _UpdatePostState();
 }
 
-class _CreatePostState extends State<CreatePost> {
+class _UpdatePostState extends State<UpdatePost> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController titleController = TextEditingController();
-  TextEditingController descController = TextEditingController();
+  late TextEditingController titController;
+  late TextEditingController bodyController;
+
+  @override
+  void initState() {
+    super.initState();
+    titController = new TextEditingController(text: widget.oldTitle);
+    bodyController = new TextEditingController(text: widget.oldBody);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +58,7 @@ class _CreatePostState extends State<CreatePost> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          "Create Post",
+          "Update Post",
           style: TextStyle(
             fontSize: 25.0,
             fontWeight: FontWeight.bold,
@@ -66,7 +75,8 @@ class _CreatePostState extends State<CreatePost> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 8.0),
                 child: TextFormField(
-                  controller: titleController,
+                  controller: titController,
+                  // initialValue: widget.oldTitle,
                   decoration: InputDecoration(
                     hintText: "Masukkan judul post",
                     labelText: "Title",
@@ -85,7 +95,8 @@ class _CreatePostState extends State<CreatePost> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 8.0),
                 child: TextFormField(
-                  controller: descController,
+                  controller: bodyController,
+                  // initialValue: widget.oldBody,
                   decoration: InputDecoration(
                     hintText: "Masukkan body post",
                     labelText: "Body",
@@ -98,8 +109,8 @@ class _CreatePostState extends State<CreatePost> {
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    var response = createPost(titleController.text,
-                        descController.text, widget.topicId, widget.email);
+                    var response = updatePost(
+                        titController.text, bodyController.text, widget.postId);
                     showDialog(
                       context: context,
                       builder: (BuildContext context) => AlertDialog(
@@ -113,8 +124,8 @@ class _CreatePostState extends State<CreatePost> {
                         ),
                       ),
                     );
-                    titleController.clear();
-                    descController.clear();
+                    titController.clear();
+                    bodyController.clear();
                   }
                 },
                 child: Text(

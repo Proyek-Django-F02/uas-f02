@@ -16,7 +16,8 @@ Future<String> createTopic(String title, String description) async {
         'description': description,
       }));
   if (response.statusCode == 200) {
-    return response.body;
+    Map<String, dynamic> result = json.decode(response.body);
+    return result['result'];
   } else {
     return "Error Occured";
   }

@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:uas_f02/page/fauzul/some_function.dart';
 import 'comment_unit.dart';
 import 'package:http/http.dart' as http;
 
@@ -151,7 +152,13 @@ class _CommentListState extends State<CommentList> {
                                                           Alignment.centerRight,
                                                       icon: const Icon(
                                                           Icons.more_vert),
-                                                      onPressed: () {},
+                                                      onPressed: () {
+                                                        modalBottomSheetMenu(
+                                                            context,
+                                                            widget.id,
+                                                            widget.title,
+                                                            widget.description);
+                                                      },
                                                     ),
                                                   ),
                                                 ),
