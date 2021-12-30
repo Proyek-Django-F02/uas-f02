@@ -28,7 +28,7 @@ User persona dari website ini hanya ada dua, yaitu:
 ## Modul dan Pembagiannya
 |No |Modul            |Deskripsi                                                                                  |PJ Modul|
 |---|-----------------|-------------------------------------------------------------------------------------------|--------|
-|1  |User             |User dapat membuat akun baru, meng-update profile, autentikasi pengguna dengan fitur login, dan mengirimkan permintaan berteman beserta pesan dengan pengguna lain.                                               |Zidan   |
+|1  |User             |User dapat membuat akun baru, meng-update profile, autentikasi pengguna dengan fitur login kemudian membuat navigasi.                                               |Zidan   |
 |2  |To-do List       |User dapat memasukkan list hal-hal yang akan dilakukan yang dilengkapi dengan tenggat waktu, deskripsi, dan checklist untuk menandai hal yang telah dilakukan.                                                 |Shabrina|
 |3  |Notes            |User dapat menambahkan dan menghapus catatan berupa memo singkat.                          |Reyza   |
 |4  |Schedule         |User dapat menambahkan dan menghapus aktivitas dengan keterangan waktu, tipe aktivitas, dan deskripsi aktivitas pada kalender. Aktivitas ditampilkan per                                                                |Isyah   |
