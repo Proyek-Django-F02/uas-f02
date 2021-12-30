@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:uas_f02/page/isyah/temp_schedule_event.dart';
+import 'package:uas_f02/page/isyah/model.dart';
+import 'package:uas_f02/page/isyah/repository.dart';
 
 class SchedulePage extends StatefulWidget {
   final String name;
@@ -20,7 +21,12 @@ class SchedulePage extends StatefulWidget {
 }
 
 class _SchedulePageState extends State<SchedulePage> {
-  late Map<DateTime, List<Event>> selectedEvents;
+  late String name;
+  late Future<List> listActivity;
+  late Map<DateTime, List<ScheduleActivity>> selectedActivities;
+
+  Repository repository = Repository();
+  // late Map<DateTime, List<Event>> selectedEvents;
   CalendarFormat format = CalendarFormat.month;
   DateTime selectedDay = DateTime.now();
   DateTime focusedDay = DateTime.now();
@@ -36,12 +42,35 @@ class _SchedulePageState extends State<SchedulePage> {
 
   @override
   void initState() {
-    selectedEvents = {};
+    // selectedEvents = {};
+    name = widget.name;
+    selectedActivities = {};
+    getData(widget.name);
+    print(name);
     super.initState();
   }
 
-  List<Event> _getEventsfromDay(DateTime date) {
-    return selectedEvents[date] ?? [];
+  List<ScheduleActivity> _getActivitiesfromDay(DateTime date) {
+    print(selectedActivities.toString());
+    return selectedActivities[date] ?? [];
+  }
+
+  Future<List> getData(name) async {
+    Future<List> listActivity = repository.getData(name);
+
+    for (ScheduleActivity activity in await listActivity) {
+      DateTime date = DateTime(activity.year, activity.month, activity.day);
+
+      if (selectedActivities[date] != null) {
+        selectedActivities[date]!.add(activity);
+      } else {
+        selectedActivities[date] = [activity];
+      }
+    }
+
+    // print(selectedActivities.toString());
+
+    return listActivity;
   }
 
   _cancelForm() {
@@ -57,23 +86,31 @@ class _SchedulePageState extends State<SchedulePage> {
 
   _submitForm() {
     if (_formKey.currentState!.validate()) {
-      if (selectedEvents[selectedDay] != null) {
-        selectedEvents[selectedDay]!.add(
-          Event(
-              title: _titleController.text,
-              desc: _descController.text,
+      if (selectedActivities[selectedDay] != null) {
+        selectedActivities[selectedDay]!.add(
+          ScheduleActivity(
+              activity: _titleController.text,
+              year: selectedDay.year,
+              month: selectedDay.month,
+              day: selectedDay.day,
+              startTime: _startTimeController.text + ':00',
+              endTime: _endTimeController.text + '00',
               type: dropdownValue,
-              startTime: _startTimeController.text,
-              endTime: _endTimeController.text)
+              desc: _descController.text,
+              name: name)
         );
       } else {
-        selectedEvents[selectedDay] = [
-          Event(
-              title: _titleController.text,
-              desc: _descController.text,
+        selectedActivities[selectedDay] = [
+          ScheduleActivity(
+              activity: _titleController.text,
+              year: selectedDay.year,
+              month: selectedDay.month,
+              day: selectedDay.day,
+              startTime: _startTimeController.text + ':00',
+              endTime: _endTimeController.text + '00',
               type: dropdownValue,
-              startTime: _startTimeController.text,
-              endTime: _endTimeController.text)
+              desc: _descController.text,
+              name: name)
         ];
       }
     }
@@ -123,7 +160,7 @@ class _SchedulePageState extends State<SchedulePage> {
               return isSameDay(selectedDay, date);
             },
 
-            eventLoader: _getEventsfromDay,
+            eventLoader: _getActivitiesfromDay,
 
             //To style the Calendar
             calendarStyle: CalendarStyle(
@@ -156,62 +193,129 @@ class _SchedulePageState extends State<SchedulePage> {
           ),
 
           // Show Activities
+          // Expanded(
+          //     child:
+          //     ListView.builder(
+          //       scrollDirection: Axis.vertical,
+          //       shrinkWrap: true,
+          //       itemCount: _getEventsfromDay(selectedDay).length,
+          //       itemBuilder: (BuildContext context, index) {
+          //         return Dismissible(
+          //           key: UniqueKey(),
+          //           direction: DismissDirection.endToStart,
+          //           onDismissed: (_) {
+          //             setState(() {
+          //               _getEventsfromDay(selectedDay).removeAt(index);
+          //             });
+          //           },
+          //           child: Card(
+          //             margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+          //             child: Padding(
+          //               padding: EdgeInsets.all(10),
+          //               child: Column(
+          //                 crossAxisAlignment: CrossAxisAlignment.stretch,
+          //                 children: [
+          //                   Row(
+          //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //                     children: [
+          //                       Column(
+          //                         crossAxisAlignment: CrossAxisAlignment.start,
+          //                         children: [
+          //                           Text(_getEventsfromDay(selectedDay)[index].startTime + " - " + _getEventsfromDay(selectedDay)[index].endTime, style: const TextStyle(color: Colors.lightBlueAccent)),
+          //                           Text(_getEventsfromDay(selectedDay)[index].title, style: const TextStyle(fontWeight: FontWeight.bold)),
+          //                         ],
+          //                       ),
+          //                       Text(_getEventsfromDay(selectedDay)[index].type, style: const TextStyle(color: Colors.lightBlueAccent)),
+          //                     ],
+          //                   ),
+          //                   const SizedBox(height: 5),
+          //                   if (_getEventsfromDay(selectedDay)[index].desc != '')
+          //                     const Text('Description', style: TextStyle(fontWeight: FontWeight.bold)),
+          //                   if (_getEventsfromDay(selectedDay)[index].desc != '')
+          //                     Text(_getEventsfromDay(selectedDay)[index].desc),
+          //                 ],
+          //               ),
+          //             )
+          //           ),
+          //           background: Container(
+          //             color: Colors.red,
+          //             margin: EdgeInsets.symmetric(horizontal: 15),
+          //             alignment: Alignment.centerRight,
+          //             child: Icon(
+          //               Icons.delete,
+          //               color: Colors.white,
+          //             )
+          //           )
+          //         );
+          //       }
+          //     )
+          // ),
           Expanded(
-              child:
-              ListView.builder(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: _getEventsfromDay(selectedDay).length,
-                itemBuilder: (BuildContext context, index) {
-                  return Dismissible(
-                    key: UniqueKey(),
-                    direction: DismissDirection.endToStart,
-                    onDismissed: (_) {
-                      setState(() {
-                        _getEventsfromDay(selectedDay).removeAt(index);
-                      });
-                    },
-                    child: Card(
-                      margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                      child: Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(_getEventsfromDay(selectedDay)[index].startTime + " - " + _getEventsfromDay(selectedDay)[index].endTime, style: const TextStyle(color: Colors.lightBlueAccent)),
-                                    Text(_getEventsfromDay(selectedDay)[index].title, style: const TextStyle(fontWeight: FontWeight.bold)),
-                                  ],
+              child: FutureBuilder(
+                  future: getData(name),
+                  builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: _getActivitiesfromDay(selectedDay).length,
+                          itemBuilder: (context, index) {
+                            return Dismissible(
+                                key: UniqueKey(),
+                                direction: DismissDirection.endToStart,
+                                onDismissed: (_) {
+                                  setState(() {
+                                    _getActivitiesfromDay(selectedDay).removeAt(index);
+                                  });
+                                },
+                                child: Card(
+                                    margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(10),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(_getActivitiesfromDay(selectedDay)[index].startTime.toString() + " - " + _getActivitiesfromDay(selectedDay)[index].endTime.toString(), style: const TextStyle(color: Colors.lightBlueAccent)),
+                                                  Text(_getActivitiesfromDay(selectedDay)[index].activity, style: const TextStyle(fontWeight: FontWeight.bold)),
+                                                ],
+                                              ),
+                                              Text(_getActivitiesfromDay(selectedDay)[index].type, style: const TextStyle(color: Colors.lightBlueAccent)),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 5),
+                                          if (_getActivitiesfromDay(selectedDay)[index].desc != '')
+                                            const Text('Description', style: TextStyle(fontWeight: FontWeight.bold)),
+                                          if (_getActivitiesfromDay(selectedDay)[index].desc != '')
+                                            Text(_getActivitiesfromDay(selectedDay)[index].desc),
+                                        ],
+                                      ),
+                                    )
                                 ),
-                                Text(_getEventsfromDay(selectedDay)[index].type, style: const TextStyle(color: Colors.lightBlueAccent)),
-                              ],
-                            ),
-                            const SizedBox(height: 5),
-                            if (_getEventsfromDay(selectedDay)[index].desc != '')
-                              const Text('Description', style: TextStyle(fontWeight: FontWeight.bold)),
-                            if (_getEventsfromDay(selectedDay)[index].desc != '')
-                              Text(_getEventsfromDay(selectedDay)[index].desc),
-                          ],
-                        ),
-                      )
-                    ),
-                    background: Container(
-                      color: Colors.red,
-                      margin: EdgeInsets.symmetric(horizontal: 15),
-                      alignment: Alignment.centerRight,
-                      child: Icon(
-                        Icons.delete,
-                        color: Colors.white,
-                      )
-                    )
-                  );
-                }
-              )
+                                background: Container(
+                                    color: Colors.red,
+                                    margin: EdgeInsets.symmetric(horizontal: 15),
+                                    alignment: Alignment.centerRight,
+                                    child: Icon(
+                                      Icons.delete,
+                                      color: Colors.white,
+                                    )
+                                )
+                            );
+                          }
+                      );
+                    } else if (snapshot.hasError) {
+                        return Text('${snapshot.error}');
+                    } else {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  }
+              ),
           )
         ],
       ),
@@ -354,6 +458,6 @@ class _SchedulePageState extends State<SchedulePage> {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<Map<DateTime, List<Event>>>('selectedEvents', selectedEvents));
+    properties.add(DiagnosticsProperty<Map<DateTime, List<ScheduleActivity>>>('selectedActivities', selectedActivities));
   }
 }
