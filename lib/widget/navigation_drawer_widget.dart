@@ -307,7 +307,7 @@ class NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
         break;
       case 2:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => NotesPage(
+          builder: (context) => Notes(
             name: name,
             email: email,
             urlImage: urlImage,
