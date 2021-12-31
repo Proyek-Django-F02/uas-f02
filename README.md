@@ -9,7 +9,7 @@
 - Nasywa Kamila (2006486885)
 - Isyah Auliarahmani Rafifa (2006464221)
 
-### [Link Download APK](https://drive.google.com/drive/u/0/folders/1Um-wtzT9cNvor202PEaC6vhdOlDNHRMe)
+### [Link Download APK](https://github.com/Proyek-Django-F02/uas-f02/raw/master/build/app/outputs/flutter-apk/app.apk)
 
 ## Tema
 Kelompok kami mengangkat tema aplikasi Productivity.
