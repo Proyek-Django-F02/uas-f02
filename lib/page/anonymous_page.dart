@@ -5,8 +5,8 @@ import 'dart:convert';
 Future<List> fetchAnonymsgItem(name, urlImage, email) async {
   List<AnonymsgItem> data;
 
-  var response = await http.get(
-      Uri.parse('django-f02.herokuapp.com/anonymsg/flutter/list-message/' + name));
+  var response = await http.get(Uri.parse(
+      'http://django-f02.herokuapp.com/anonymsg/flutter/list-message/' + name));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -184,7 +184,7 @@ class AnonymsgItemState extends State<AnonymsgItem> {
 
                           final response = await http.post(
                               Uri.parse(
-                                  "django-f02.herokuapp.com/anonymsg/flutter/edit-message/"),
+                                  "http://django-f02.herokuapp.com/anonymsg/flutter/edit-message/"),
                               headers: <String, String>{
                                 'Content-Type':
                                     'application/json;charset=UTF-8',
@@ -222,7 +222,7 @@ class AnonymsgItemState extends State<AnonymsgItem> {
 
                           final response = await http.post(
                               Uri.parse(
-                                  "django-f02.herokuapp.com/anonymsg/flutter/edit-message/"),
+                                  "http://django-f02.herokuapp.com/anonymsg/flutter/edit-message/"),
                               headers: <String, String>{
                                 'Content-Type':
                                     'application/json;charset=UTF-8',
