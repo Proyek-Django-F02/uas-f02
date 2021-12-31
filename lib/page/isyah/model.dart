@@ -8,8 +8,7 @@ class ScheduleActivity {
   String type = 'General';
   String desc = '';
   String name;
-  // String urlImage;
-  // String email;
+  String id;
 
   ScheduleActivity({
     required this.activity,
@@ -20,9 +19,8 @@ class ScheduleActivity {
     required this.endTime,
     required this.type,
     required this.desc,
-    required this.name
-    // required this.urlImage,
-    // required this.email,
+    required this.name,
+    required this.id
   });
 
   factory ScheduleActivity.fromJson(Map<String, dynamic> json, name) {
@@ -35,10 +33,8 @@ class ScheduleActivity {
         endTime: json['end_time'],
         type: json['type'],
         desc: json['desc'],
-        name: name
-        // name: json['name'],
-        // urlImage: json['urlImage'],
-        // email: json['email']
+        name: name,
+        id: json['id'].toString()
     );
   }
 

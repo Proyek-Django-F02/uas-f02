@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -26,7 +28,6 @@ class _SchedulePageState extends State<SchedulePage> {
   late Map<DateTime, List<ScheduleActivity>> selectedActivities;
 
   Repository repository = Repository();
-  // late Map<DateTime, List<Event>> selectedEvents;
   CalendarFormat format = CalendarFormat.month;
   DateTime selectedDay = DateTime.now();
   DateTime focusedDay = DateTime.now();
@@ -42,10 +43,8 @@ class _SchedulePageState extends State<SchedulePage> {
 
   @override
   void initState() {
-    // selectedEvents = {};
     name = widget.name;
-    selectedActivities = {};
-    getData(widget.name);
+    listActivity = getData(widget.name);
     print(name);
     super.initState();
   }
@@ -56,7 +55,8 @@ class _SchedulePageState extends State<SchedulePage> {
   }
 
   Future<List> getData(name) async {
-    Future<List> listActivity = repository.getData(name);
+    listActivity = repository.getData(name);
+    selectedActivities = {};
 
     for (ScheduleActivity activity in await listActivity) {
       DateTime date = DateTime(activity.year, activity.month, activity.day);
@@ -67,8 +67,6 @@ class _SchedulePageState extends State<SchedulePage> {
         selectedActivities[date] = [activity];
       }
     }
-
-    // print(selectedActivities.toString());
 
     return listActivity;
   }
@@ -84,45 +82,30 @@ class _SchedulePageState extends State<SchedulePage> {
     setState((){});
   }
 
-  _submitForm() {
+  _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      if (selectedActivities[selectedDay] != null) {
-        selectedActivities[selectedDay]!.add(
-          ScheduleActivity(
-              activity: _titleController.text,
-              year: selectedDay.year,
-              month: selectedDay.month,
-              day: selectedDay.day,
-              startTime: _startTimeController.text + ':00',
-              endTime: _endTimeController.text + '00',
-              type: dropdownValue,
-              desc: _descController.text,
-              name: name)
-        );
-      } else {
-        selectedActivities[selectedDay] = [
-          ScheduleActivity(
-              activity: _titleController.text,
-              year: selectedDay.year,
-              month: selectedDay.month,
-              day: selectedDay.day,
-              startTime: _startTimeController.text + ':00',
-              endTime: _endTimeController.text + '00',
-              type: dropdownValue,
-              desc: _descController.text,
-              name: name)
-        ];
-      }
+      String activity = _titleController.text;
+      int year = selectedDay.year;
+      int month = selectedDay.month;
+      int day = selectedDay.day;
+      String startTime = _startTimeController.text;
+      String endTime = _endTimeController.text;
+      String type = dropdownValue;
+      String desc = _descController.text;
+      String name = widget.name;
+
+      String response = await repository.postData(name, activity, year, month, day, startTime, endTime, type, desc);
+      print(response);
+      _formKey.currentState!.reset();
+
+      dropdownValue = 'General';
+      _titleController.text = '';
+      _descController.text = '';
+      _startTimeController.text = '';
+      _endTimeController.text = '';
+      Navigator.pop(context);
+      setState((){});
     }
-    _formKey.currentState!.save();
-    _formKey.currentState!.reset();
-    dropdownValue = 'General';
-    _titleController.text = '';
-    _descController.text = '';
-    _startTimeController.text = '';
-    _endTimeController.text = '';
-    Navigator.pop(context);
-    setState((){});
   }
 
   @override
@@ -150,9 +133,12 @@ class _SchedulePageState extends State<SchedulePage> {
 
             //Day Changed
             onDaySelected: (DateTime selectDay, DateTime focusDay) {
-              setState(() {
-                selectedDay = selectDay;
-                focusedDay = focusDay;
+              getData(widget.name).then((value) => {
+                setState(() {
+                  listActivity = value as Future<List>;
+                  selectedDay = selectDay;
+                  focusedDay = focusDay;
+                })
               });
               print(focusedDay);
             },
@@ -198,16 +184,22 @@ class _SchedulePageState extends State<SchedulePage> {
           //     ListView.builder(
           //       scrollDirection: Axis.vertical,
           //       shrinkWrap: true,
-          //       itemCount: _getEventsfromDay(selectedDay).length,
+          //       itemCount: _getActivitiesfromDay(selectedDay).length,
           //       itemBuilder: (BuildContext context, index) {
           //         return Dismissible(
           //           key: UniqueKey(),
           //           direction: DismissDirection.endToStart,
-          //           onDismissed: (_) {
-          //             setState(() {
-          //               _getEventsfromDay(selectedDay).removeAt(index);
-          //             });
-          //           },
+          //             onDismissed: (_) async {
+          //               bool response = await repository.deleteData(_getActivitiesfromDay(selectedDay)[index].id);
+          //               if (response) {
+          //                 print('Delete data success!');
+          //                 // setState(() {
+          //                 //   _getActivitiesfromDay(selectedDay).removeAt(index);
+          //                 // });
+          //               } else {
+          //                 print('Delete data failed');
+          //               }
+          //             },
           //           child: Card(
           //             margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
           //             child: Padding(
@@ -221,18 +213,18 @@ class _SchedulePageState extends State<SchedulePage> {
           //                       Column(
           //                         crossAxisAlignment: CrossAxisAlignment.start,
           //                         children: [
-          //                           Text(_getEventsfromDay(selectedDay)[index].startTime + " - " + _getEventsfromDay(selectedDay)[index].endTime, style: const TextStyle(color: Colors.lightBlueAccent)),
-          //                           Text(_getEventsfromDay(selectedDay)[index].title, style: const TextStyle(fontWeight: FontWeight.bold)),
+          //                           Text(_getActivitiesfromDay(selectedDay)[index].startTime.toString() + " - " + _getActivitiesfromDay(selectedDay)[index].endTime.toString(), style: const TextStyle(color: Colors.lightBlueAccent)),
+          //                           Text(_getActivitiesfromDay(selectedDay)[index].activity, style: const TextStyle(fontWeight: FontWeight.bold)),
           //                         ],
           //                       ),
-          //                       Text(_getEventsfromDay(selectedDay)[index].type, style: const TextStyle(color: Colors.lightBlueAccent)),
+          //                       Text(_getActivitiesfromDay(selectedDay)[index].type, style: const TextStyle(color: Colors.lightBlueAccent)),
           //                     ],
           //                   ),
           //                   const SizedBox(height: 5),
-          //                   if (_getEventsfromDay(selectedDay)[index].desc != '')
+          //                   if (_getActivitiesfromDay(selectedDay)[index].desc != '')
           //                     const Text('Description', style: TextStyle(fontWeight: FontWeight.bold)),
-          //                   if (_getEventsfromDay(selectedDay)[index].desc != '')
-          //                     Text(_getEventsfromDay(selectedDay)[index].desc),
+          //                   if (_getActivitiesfromDay(selectedDay)[index].desc != '')
+          //                     Text(_getActivitiesfromDay(selectedDay)[index].desc),
           //                 ],
           //               ),
           //             )
@@ -252,7 +244,7 @@ class _SchedulePageState extends State<SchedulePage> {
           // ),
           Expanded(
               child: FutureBuilder(
-                  future: getData(name),
+                  future: repository.getData(name),
                   builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                     if (snapshot.hasData) {
                       return ListView.builder(
@@ -263,10 +255,16 @@ class _SchedulePageState extends State<SchedulePage> {
                             return Dismissible(
                                 key: UniqueKey(),
                                 direction: DismissDirection.endToStart,
-                                onDismissed: (_) {
-                                  setState(() {
-                                    _getActivitiesfromDay(selectedDay).removeAt(index);
-                                  });
+                                onDismissed: (_) async {
+                                  bool response = await repository.deleteData(_getActivitiesfromDay(selectedDay)[index].id);
+                                  if (response) {
+                                    print('Delete data success!');
+                                    // setState(() {
+                                    //   _getActivitiesfromDay(selectedDay).removeAt(index);
+                                    // });
+                                  } else {
+                                    print('Delete data failed');
+                                  }
                                 },
                                 child: Card(
                                     margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
@@ -341,7 +339,7 @@ class _SchedulePageState extends State<SchedulePage> {
                           return "Please type the activity's title";
                         }
                         return null;
-                      }
+                      },
                   ),
                   TextFormField(
                     controller: _startTimeController,  // add this line.
@@ -372,7 +370,7 @@ class _SchedulePageState extends State<SchedulePage> {
                     },
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Cant be empty';
+                        return 'Please choose start time';
                       }
                       return null;
                     },
@@ -406,7 +404,7 @@ class _SchedulePageState extends State<SchedulePage> {
                     },
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Cant be empty';
+                        return 'Please choose end time';
                       }
                       return null;
                     },
