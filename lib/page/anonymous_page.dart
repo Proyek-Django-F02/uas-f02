@@ -6,7 +6,7 @@ Future<List> fetchAnonymsgItem(name, urlImage, email) async {
   List<AnonymsgItem> data;
 
   var response = await http.get(
-      Uri.parse('http://localhost:8000/anonymsg/flutter/list-message/' + name));
+      Uri.parse('django-f02.herokuapp.com/anonymsg/flutter/list-message/' + name));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -184,7 +184,7 @@ class AnonymsgItemState extends State<AnonymsgItem> {
 
                           final response = await http.post(
                               Uri.parse(
-                                  "http://localhost:8000/anonymsg/flutter/edit-message/"),
+                                  "django-f02.herokuapp.com/anonymsg/flutter/edit-message/"),
                               headers: <String, String>{
                                 'Content-Type':
                                     'application/json;charset=UTF-8',
@@ -222,7 +222,7 @@ class AnonymsgItemState extends State<AnonymsgItem> {
 
                           final response = await http.post(
                               Uri.parse(
-                                  "http://localhost:8000/anonymsg/flutter/edit-message/"),
+                                  "django-f02.herokuapp.com/anonymsg/flutter/edit-message/"),
                               headers: <String, String>{
                                 'Content-Type':
                                     'application/json;charset=UTF-8',
